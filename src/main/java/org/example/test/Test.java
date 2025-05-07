@@ -1,6 +1,7 @@
 package org.example.test;
 
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,5 +15,11 @@ public class Test {
          Map<String,Object> map = new HashMap<>();
         map.put("1", "2");
         System.out.println("Hello world!");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hello world!");
+
+        Arrays.asList(1, 2, 3, 4, 5);
+
     }
 }
