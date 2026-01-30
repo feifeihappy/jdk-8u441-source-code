@@ -255,6 +255,8 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * than 2 and should be at least 8 to mesh with assumptions in
      * tree removal about conversion back to plain bins upon
      * shrinkage.
+     *
+     * 单链表阈值
      */
     static final int TREEIFY_THRESHOLD = 8;
 
@@ -610,6 +612,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      *         previously associated <tt>null</tt> with <tt>key</tt>.)
      */
     public V put(K key, V value) {
+        //1 根据key计算hash
         return putVal(hash(key), key, value, false, true);
     }
 
@@ -628,18 +631,24 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                    boolean evict) {
 
         Node<K,V>[] tab; Node<K,V> p; int n, i;
+        //2 如果链表数组空，初始化数组
         if ((tab = table) == null || (n = tab.length) == 0)
             n = (tab = resize()).length;
+        // 3 根据hash值计算数组索引, 此位置节点空，存放当前节点；（& 两边是int则为位运算，两边是boolean 则为逻辑运算）
         if ((p = tab[i = (n - 1) & hash]) == null)
             tab[i] = newNode(hash, key, value, null);
         else {
+            // 4 存在hash 碰撞问题，分三种情况
             Node<K,V> e; K k;
+            // 4.1 新旧节点对比 hash、key 相同，沿用原有节点；跳转到（4.1.1）
             if (p.hash == hash &&
                 ((k = p.key) == key || (key != null && key.equals(k))))
                 e = p;
+            // 4.2 节点类型为TreeNode，放入树中
             else if (p instanceof TreeNode)
                 e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
             else {
+                // 4.3 链表节点，遍历链表，如果链表长度>= 7,调用treeifyBin 判断是否要转为红黑树；（如果数组长度<64,只扩容；如果数组长度>64,转红黑树）
                 for (int binCount = 0; ; ++binCount) {
                     if ((e = p.next) == null) {
                         p.next = newNode(hash, key, value, null);
@@ -647,16 +656,19 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                             treeifyBin(tab, hash);
                         break;
                     }
+                    // 4.3.1 新旧节点对比 hash、key 相同，沿用原有节点；跳转到（4.1.1）
                     if (e.hash == hash &&
                         ((k = e.key) == key || (key != null && key.equals(k))))
                         break;
                     p = e;
                 }
             }
+//            4.1.1 说明存在hash 碰撞，后put 的value 覆盖旧value
             if (e != null) { // existing mapping for key
                 V oldValue = e.value;
                 if (!onlyIfAbsent || oldValue == null)
                     e.value = value;
+//                LinkedHashMap 会实现，todo 待办
                 afterNodeAccess(e);
                 return oldValue;
             }
@@ -674,6 +686,8 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * Otherwise, because we are using power-of-two expansion, the
      * elements from each bin must either stay at same index, or move
      * with a power of two offset in the new table.
+     *
+     * 初始化数组
      *
      * @return the table
      */
@@ -694,6 +708,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
         else if (oldThr > 0) // initial capacity was placed in threshold
             newCap = oldThr;
         else {               // zero initial threshold signifies using defaults
+//            数组默认初始容量
             newCap = DEFAULT_INITIAL_CAPACITY;
             newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
         }
