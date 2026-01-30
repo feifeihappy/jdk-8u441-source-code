@@ -12,5 +12,6 @@ public class HashMapTest {
         HashMap<String, String> map = new HashMap<>();
         map.put("1", "1");
         System.out.println( map);
+        map.get("1");
     }
 }
