@@ -933,15 +933,20 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
      */
     public V get(Object key) {
         Node<K,V>[] tab; Node<K,V> e, p; int n, eh; K ek;
+        //1、 根据key获取hash值
         int h = spread(key.hashCode());
+        //2、 根据hash 值获取节点；
         if ((tab = table) != null && (n = tab.length) > 0 &&
             (e = tabAt(tab, (n - 1) & h)) != null) {
+            //3 hash 值相等，key 值相等，返回value;
             if ((eh = e.hash) == h) {
                 if ((ek = e.key) == key || (ek != null && key.equals(ek)))
                     return e.val;
             }
             else if (eh < 0)
+                //4 hash < 0 ;说明是树节点或者正在扩容；
                 return (p = e.find(h, key)) != null ? p.val : null;
+            // 5 遍历链表
             while ((e = e.next) != null) {
                 if (e.hash == h &&
                     ((ek = e.key) == key || (ek != null && key.equals(ek))))

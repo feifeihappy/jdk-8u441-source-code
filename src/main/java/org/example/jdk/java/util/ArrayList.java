@@ -132,6 +132,7 @@ public class ArrayList<E> extends AbstractList<E>
      * empty ArrayList with elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA
      * will be expanded to DEFAULT_CAPACITY when the first element is added.
      */
+//    容器
     transient Object[] elementData; // non-private to simplify nested class access
 
     /**
