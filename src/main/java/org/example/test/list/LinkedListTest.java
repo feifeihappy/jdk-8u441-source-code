@@ -1,15 +1,16 @@
 package org.example.test.list;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * description：TODO
- * time：2026/2/1 17:53
+ * time：2026/2/3 15:07
  * auther：zhaopengfei
  */
-public class ArrayLIstTest {
+public class LinkedListTest {
+
     public static void main(String[] args) {
-        ArrayList<String> list = new ArrayList<>();
+        LinkedList list = new LinkedList();
         list.add("1");
         list.get(0);
     }

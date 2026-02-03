@@ -135,7 +135,9 @@ public class LinkedList<E>
     }
 
     /**
-     * Links e as last element.
+     * 将元素 e 链接到链表末尾。
+     * 如果链表为空，则新节点同时成为首节点和尾节点；
+     * 否则，将新节点链接到原尾节点之后，并更新尾指针。
      */
     void linkLast(E e) {
         final Node<E> l = last;
@@ -566,15 +568,20 @@ public class LinkedList<E>
     Node<E> node(int index) {
         // assert isElementIndex(index);
 
+        // 根据索引位置选择从头部或尾部开始遍历，优化查找效率
         if (index < (size >> 1)) {
+            // 索引靠近头部，从第一个节点开始正向遍历
             Node<E> x = first;
-            for (int i = 0; i < index; i++)
+            for (int i = 0; i < index; i++) {
                 x = x.next;
+            }
             return x;
         } else {
+            // 索引靠近尾部，从最后一个节点开始反向遍历
             Node<E> x = last;
-            for (int i = size - 1; i > index; i--)
+            for (int i = size - 1; i > index; i--) {
                 x = x.prev;
+            }
             return x;
         }
     }

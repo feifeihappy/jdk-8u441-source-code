@@ -479,12 +479,20 @@ public class ArrayList<E> extends AbstractList<E>
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
     public void add(int index, E element) {
+        // 检查索引是否合法
         rangeCheckForAdd(index);
 
+        // 确保容量足够，必要时进行扩容
         ensureCapacityInternal(size + 1);  // Increments modCount!!
+
+        // 将index位置及其后的元素向后移动一位
         System.arraycopy(elementData, index, elementData, index + 1,
                          size - index);
+
+        // 在指定位置插入新元素
         elementData[index] = element;
+
+        // 增加实际元素数量
         size++;
     }
 
