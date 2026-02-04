@@ -158,6 +158,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
         // assert lock.getHoldCount() == 1;
         // assert items[putIndex] == null;
         final Object[] items = this.items;
+        //元素放入数组
         items[putIndex] = x;
         if (++putIndex == items.length)
             putIndex = 0;
@@ -174,6 +175,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
         // assert items[takeIndex] != null;
         final Object[] items = this.items;
         @SuppressWarnings("unchecked")
+                //获取元素
         E x = (E) items[takeIndex];
         items[takeIndex] = null;
         if (++takeIndex == items.length)
@@ -349,6 +351,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();
         try {
+            // 相等说明队列已满，当前线程将被挂起放到AQS队列中（notFull），等待队列非满时插入
             while (count == items.length)
                 notFull.await();
             enqueue(e);
