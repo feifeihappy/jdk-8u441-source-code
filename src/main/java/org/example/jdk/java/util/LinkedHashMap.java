@@ -437,8 +437,10 @@ public class LinkedHashMap<K,V>
      */
     public V get(Object key) {
         Node<K,V> e;
+        //调用hashmap 方法
         if ((e = getNode(hash(key), key)) == null)
             return null;
+        //accessOrder false 插入顺序，true 查询顺序
         if (accessOrder)
             afterNodeAccess(e);
         return e.value;
