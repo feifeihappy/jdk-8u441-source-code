@@ -216,7 +216,7 @@ public class HashSet<E>
      * @return <tt>true</tt> if this set did not already contain the specified
      * element
      */
-    public boolean add(E e) {
+    public boolean add(E e) {//复用map的put方法
         return map.put(e, PRESENT)==null;
     }
 
